@@ -60,3 +60,4 @@ crashlytics-build.properties
 
 Unity In Action Simple FPS/UserSettings/Layouts/default-2021.dwlt
 Unity In Action Simple FPS/ProjectSettings/Packages/com.unity.testtools.codecoverage/Settings.json
+*.dwlt
