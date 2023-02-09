@@ -28,15 +28,22 @@ public class PlatformerPlayer : MonoBehaviour
 
         Vector3 max = box.bounds.max;
         Vector3 min = box.bounds.min;
-        Vector2 corner1 = new Vector2(max.x, min.y - .1f);
-        Vector2 corner2 = new Vector2(min.x, min.y - .2f);
+        Vector2 corner1 = new Vector2((max.x - .01f), min.y - .1f);
+        Vector2 corner2 = new Vector2((min.x + .01f), min.y - .2f);
+        Vector2 boxCorner1 = new Vector2(max.x, max.y);
+        Vector2 boxCorner2 = new Vector2(min.x, min.y);
         Collider2D hit = Physics2D.OverlapArea(corner1, corner2);
+        Collider2D phasing = Physics2D.OverlapArea(boxCorner1, boxCorner2, 0);
+
+        Debug.Log(phasing);
 
         bool grounded = false;
-        if (hit != null)
+        if (hit != null && phasing == null)
         {
             grounded= true;
         }
+
+        body.gravityScale = (grounded && Mathf.Approximately(deltaX, 0)) ? 0 : 1;
 
         if (Input.GetKeyDown(KeyCode.Space) && grounded)
         {
