@@ -30,17 +30,12 @@ public class PlatformerPlayer : MonoBehaviour
         Vector3 min = box.bounds.min;
         Vector2 corner1 = new Vector2((max.x - .01f), min.y - .1f);
         Vector2 corner2 = new Vector2((min.x + .01f), min.y - .2f);
-        Vector2 boxCorner1 = new Vector2(max.x, max.y);
-        Vector2 boxCorner2 = new Vector2(min.x, min.y);
         Collider2D hit = Physics2D.OverlapArea(corner1, corner2);
-        Collider2D phasing = Physics2D.OverlapArea(boxCorner1, boxCorner2, 0);
-
-        Debug.Log(phasing);
-
+            
         bool grounded = false;
-        if (hit != null && phasing == null)
+        if (hit != null)
         {
-            grounded= true;
+            grounded = true;
         }
 
         body.gravityScale = (grounded && Mathf.Approximately(deltaX, 0)) ? 0 : 1;
@@ -48,6 +43,20 @@ public class PlatformerPlayer : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && grounded)
         {
             body.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        }
+
+        MovingPlatform platform = null;
+        if (hit != null)
+        {
+            platform = hit.GetComponent<MovingPlatform>();
+        }
+        if (platform != null)
+        {
+            transform.parent = platform.transform;
+        }
+        else
+        {
+            transform.parent = null;
         }
 
         anim.SetFloat("speed", Mathf.Abs(deltaX));
