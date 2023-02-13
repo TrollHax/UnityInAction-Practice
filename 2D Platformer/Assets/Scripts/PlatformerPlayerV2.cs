@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlatformerPlayer : MonoBehaviour
+public class PlatformerPlayerV2 : MonoBehaviour
 {
     public float speed = 4.5f;
     public float jumpForce = 12.0f;
@@ -26,19 +26,16 @@ public class PlatformerPlayer : MonoBehaviour
         Vector2 movement = new Vector2(deltaX, body.velocity.y);
         body.velocity = movement;
 
-        Vector3 max = box.bounds.max;
-        Vector3 min = box.bounds.min;
-        Vector2 corner1 = new Vector2((max.x - .01f), min.y - .1f);
-        Vector2 corner2 = new Vector2((min.x + .01f), min.y - .2f);
-        Collider2D hit = Physics2D.OverlapArea(corner1, corner2);
-            
+        Vector2 pPos = new Vector2(body.position.x, body.position.y - .3f);
+        RaycastHit2D hit = Physics2D.Raycast(pPos, -Vector2.up, .1f, 1, 0, 0);
+
         bool grounded = false;
-        if (hit != null)
+        if (hit)
         {
             grounded = true;
         }
 
-        body.gravityScale = (grounded && Mathf.Approximately(deltaX, 0)) ? 0 : 1;
+        //body.gravityScale = (grounded && Mathf.Approximately(deltaX, 0)) ? 0 : 1;
 
         if (Input.GetKeyDown(KeyCode.Space) && grounded)
         {
@@ -46,9 +43,9 @@ public class PlatformerPlayer : MonoBehaviour
         }
 
         MovingPlatform platform = null;
-        if (hit != null)
+        if (hit)
         {
-            platform = hit.GetComponent<MovingPlatform>();
+            platform = GetComponent<MovingPlatform>();
         }
         if (platform != null)
         {
