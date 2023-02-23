@@ -7,8 +7,8 @@ public class SceneController : MonoBehaviour
     [SerializeField] private GameObject enemyPrefab;
     private GameObject _enemy;
 
-    private const float baseSpeed = 3.0f;
-    private float speed = 3.0f;
+    public const float baseSpeed = 3.0f;
+    public float speed = 3.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -26,7 +26,6 @@ public class SceneController : MonoBehaviour
             float angle = Random.Range(0, 360);
             _enemy.transform.Rotate(0, angle, 0);
         }
-        _enemy.transform.Translate(0, 0, speed * Time.deltaTime);
     }
 
     void OnEnable()

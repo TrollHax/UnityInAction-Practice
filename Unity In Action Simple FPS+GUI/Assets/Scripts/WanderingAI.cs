@@ -6,9 +6,9 @@ public class WanderingAI : MonoBehaviour
 {
     [SerializeField] private GameObject fireballPrefab;
     private GameObject _fireball;
-    private const float baseSpeed = 3.0f;
+    private SceneController sceneController;
 
-    public float speed = 3.0f;
+    private float speed;
     public float obstacleRange = 5.0f;
 
     private bool _alive;
@@ -16,12 +16,15 @@ public class WanderingAI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        sceneController = GameObject.Find("Controller").GetComponent<SceneController>();
         _alive = true;
     }
 
     // Update is called once per frame
     void Update()
     {
+        speed = sceneController.speed;
+
         if (_alive)
         {
             transform.Translate(0, 0, speed * Time.deltaTime);
@@ -49,20 +52,20 @@ public class WanderingAI : MonoBehaviour
         }
     }
 
-    void OnEnable()
-    {
-        Messenger<float>.AddListener(GameEvent.SPEED_CHANGED, OnSpeedChanged);
-    }
+    //void OnEnable()
+    //{
+    //    Messenger<float>.AddListener(GameEvent.SPEED_CHANGED, OnSpeedChanged);
+    //}
 
-    void OnDisable()
-    {
-        Messenger<float>.RemoveListener(GameEvent.SPEED_CHANGED, OnSpeedChanged);
-    }
+    //void OnDisable()
+    //{
+    //    Messenger<float>.RemoveListener(GameEvent.SPEED_CHANGED, OnSpeedChanged);
+    //}
 
-    public void OnSpeedChanged(float value)
-    {
-        speed = baseSpeed * value;
-    }
+    //public void OnSpeedChanged(float value)
+    //{
+    //    speed = baseSpeed * value;
+    //}
 
     public void SetAlive(bool alive)
     {
