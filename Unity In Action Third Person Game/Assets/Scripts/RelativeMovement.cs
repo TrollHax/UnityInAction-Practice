@@ -17,12 +17,14 @@ public class RelativeMovement : MonoBehaviour
 
     private float vertSpeed;
     private CharacterController charController;
-    private ControllColliderHit contact;
+    private ControllerColliderHit contact;
+    private Animator animator;
 
     // Start is called before the first frame update
     void Start()
     {
         charController = GetComponent<CharacterController>();
+        animator = GetComponent<Animator>();
         vertSpeed = minFall;
     }
 
@@ -45,6 +47,8 @@ public class RelativeMovement : MonoBehaviour
             transform.rotation = Quaternion.Lerp(transform.rotation, direction, rotSpeed * Time.deltaTime);
         }
 
+        animator.SetFloat("Speed", movement.sqrMagnitude);
+
         bool hitGround = false;
         RaycastHit hit;
         if (vertSpeed < 0 &&
@@ -63,6 +67,7 @@ public class RelativeMovement : MonoBehaviour
             else
             {
                 vertSpeed = minFall;
+                animator.SetBool("Jumping", false);
             }
         }
         else
@@ -72,21 +77,32 @@ public class RelativeMovement : MonoBehaviour
             {
                 vertSpeed = terminalVelocity;
             }
-        }
-        if (charController.isGrounded)
-        {
-            if (Vector3.Dot(movement, contact.normal < 0)
+
+            if (contact !=null)
             {
-                movement = contact.normal * moveSpeed;
+                animator.SetBool("Jumping", true);
             }
-            else
+
+            if (charController.isGrounded)
             {
-                movement += contact.normal * moveSpeed;
+                if (Vector3.Dot(movement, contact.normal) < 0)
+                {
+                    movement = contact.normal * moveSpeed;
+                }
+                else
+                {
+                    movement += contact.normal * moveSpeed;
+                }
             }
         }
         movement.y = vertSpeed;
 
         movement *= Time.deltaTime;
         charController.Move(movement);
+    }
+
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        contact = hit;
     }
 }
