@@ -7,49 +7,57 @@ public class DoorOpenDevice : MonoBehaviour
 {
     [SerializeField] Vector3 dPos;
 
-    private bool open, inProgress;
-    private float cooldown = 1f;
+    private bool open;
+    private Vector3 ogPos;
 
     // Start is called before the first frame update
     void Start()
     {
-        inProgress = false;
+        ogPos = transform.position;
     }
 
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(cooldown);
-        if (inProgress)
-        {
-            if (cooldown > 0f)
-            {
-                cooldown -= Time.deltaTime;
-            }
-            else
-            {
-                cooldown = 1f;
-                inProgress = false;
-            }
-        }
+
     }
 
     public void Operate()
     {
-        if (!inProgress)
+        if (open)
         {
-            inProgress = true;
-            if (open)
-            {
-                Vector3 pos = transform.position - dPos;
-                transform.DOMove(pos, 1);
-            }
-            else
-            {
-                Vector3 pos = transform.position + dPos;
-                transform.DOMove(pos, 1);
-            }
-            open = !open;
+            Vector3 pos = transform.position;
+            pos.y = ogPos.y;
+            transform.DOMove(pos, 1);
+        }
+        else
+        {
+            Vector3 pos = transform.position;
+            pos.y = ogPos.y + dPos.y;
+            transform.DOMove(pos, 1);
+        }
+        open = !open;
+    }
+
+    public void Activate()
+    {
+        if (!open)
+        {
+            Vector3 pos = transform.position;
+            pos.y = ogPos.y + dPos.y;
+            transform.DOMove(pos, 1);
+            open = true;
+        }
+    }
+
+    public void Deactivate()
+    {
+        if (open)
+        {
+            Vector3 pos = transform.position;
+            pos.y = ogPos.y;
+            transform.DOMove(pos, 1);
+            open = false;
         }
     }
 }
