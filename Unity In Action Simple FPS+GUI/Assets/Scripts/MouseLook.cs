@@ -19,10 +19,14 @@ public class MouseLook : MonoBehaviour
     public float maximumVert = 45.0f;
 
     private float verticalRot = 0;
+    private bool locked;
 
     // Start is called before the first frame update
     void Start()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        locked = true;
+
         Rigidbody body = GetComponent<Rigidbody>();
         if (body != null) {
             body.freezeRotation = true;
@@ -52,6 +56,21 @@ public class MouseLook : MonoBehaviour
             float horizontalRot = transform.localEulerAngles.y + delta;
 
             transform.localEulerAngles = new Vector3(verticalRot, horizontalRot, 0);
+        }
+
+        //Locking or unlocking mouse cursor when pressing space
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (locked)
+            {
+                Cursor.lockState = CursorLockMode.None;
+                locked = false;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                locked = true;
+            }
         }
     }
 }
