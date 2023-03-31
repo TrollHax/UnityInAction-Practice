@@ -31,6 +31,7 @@ public class WeatherManager : MonoBehaviour, IGameManager
         XmlNode node = root.SelectSingleNode("clouds");
         string value = node.Attributes["value"].Value;
         cloudValue = Convert.ToInt32(value) / 100f;
+        Debug.Log($"Value: {cloudValue}");
 
         Messenger.Broadcast(GameEvent.WEATHER_UPDATED);
 
