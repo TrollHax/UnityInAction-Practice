@@ -1,5 +1,6 @@
 using System;
 using System.Xml;
+using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,20 +18,17 @@ public class WeatherManager : MonoBehaviour, IGameManager
         Debug.Log("Weather manager starting...");
 
         network = service;
-        StartCoroutine(network.GetWeatherXML(OnXMLDataLoaded));
+        StartCoroutine(network.GetWeatherJSON(OnJSONDataLoaded));
 
         status = ManagerStatus.Initializing;
     }
 
-    public void OnXMLDataLoaded(string data)
+    public void OnJSONDataLoaded(string data)
     {
-        XmlDocument doc = new XmlDocument();
-        doc.LoadXml(data);
-        XmlNode root = doc.DocumentElement;
+        JObject root = JObject.Parse(data);
 
-        XmlNode node = root.SelectSingleNode("clouds");
-        string value = node.Attributes["value"].Value;
-        cloudValue = Convert.ToInt32(value) / 100f;
+        JToken clouds = root["clouds"];
+        cloudValue = (float)clouds["all"] / 100f;
         Debug.Log($"Value: {cloudValue}");
 
         Messenger.Broadcast(GameEvent.WEATHER_UPDATED);
