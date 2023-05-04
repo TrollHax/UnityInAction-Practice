@@ -6,38 +6,41 @@ public class OrbitCamera : MonoBehaviour
 {
     [SerializeField] Transform target;
 
-    public float rotSpeed = 1.5f;
+    //public float rotSpeed = 1.5f;
 
-    private float rotY;
+    //private float rotY;
     private Vector3 offset;
 
     // Start is called before the first frame update
     void Start()
     {
-        rotY = transform.eulerAngles.y;
+        //rotY = transform.eulerAngles.y;
         offset = target.position - transform.position;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyUp("f"))
+        {
+            offset = offset. - transform.position;
+        }
     }
 
     void LateUpdate()
     {
-        float horInput = Input.GetAxis("Horizontal");
-        if (!Mathf.Approximately(horInput, 0))
-        {
-            rotY += horInput * rotSpeed;
-        }
-        else
-        {
-            rotY += Input.GetAxis("Mouse X") * rotSpeed * 3;
-        }
+        //float horInput = Input.GetAxis("Horizontal");
+        //if (!Mathf.Approximately(horInput, 0))
+        //{
+        //    rotY += horInput * rotSpeed;
+        //}
+        //else
+        //{
+        //    rotY += Input.GetAxis("Mouse X") * rotSpeed * 3;
+        //}
 
-        Quaternion rotation = Quaternion.Euler(0, rotY, 0);
-        transform.position = target.position - (rotation * offset);
+        //Quaternion rotation = Quaternion.Euler(0, rotY, 0);
+        transform.position = target.position - offset;
         transform.LookAt(target);
     }
 }
