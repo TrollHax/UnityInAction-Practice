@@ -23,7 +23,7 @@ public class OrbitCamera : MonoBehaviour
     {
         if (Input.GetKeyUp("f"))
         {
-            offset = offset. - transform.position;
+            offset = offset - transform.position;
         }
     }
 
