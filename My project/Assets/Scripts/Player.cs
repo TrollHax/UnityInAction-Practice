@@ -9,7 +9,6 @@ public class Player : MonoBehaviour
 
     private NavMeshAgent myAgent;
     private Animator animator;
-    private Rigidbody rb;
     private Vector3 prevPos;
     private float speed;
 
@@ -17,7 +16,6 @@ public class Player : MonoBehaviour
     {
         myAgent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody>();
     }
 
     void Update()
